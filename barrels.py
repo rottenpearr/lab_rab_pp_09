@@ -1,9 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
 import random
+import logging
 
 barrel_numbers = []
 pulled_barrels = []
+logging.basicConfig(filename='logging.log', level=logging.INFO)
 
 
 def input_amount_click():
@@ -12,6 +14,7 @@ def input_amount_click():
     try:
         # Считывание количества бочонков со строки amount
         amount_barrels = int(amount.get())
+        logging.info(f"Установлено количество бочонков: {amount_barrels}")
         # Создание списка для хранения номеров бочонков в мешке
         barrel_numbers = list(range(1, amount_barrels + 1))
         # Выбор случайного номера бочонка из списка, который не будет повторятся
@@ -28,7 +31,8 @@ def input_amount_click():
         pull_label.pack(padx=10, pady=10)
         pull_button.pack(padx=10, pady=10)
     except ValueError:
-        messagebox.showerror("Ошибка", "Пожалуйста, введите число.")
+        messagebox.showerror("Ошибка", "Пожалуйста, введите число!")
+        logging.error("Ошибка при вводе количества бочонков.")
 
 
 def pull_barrel():
@@ -40,10 +44,13 @@ def pull_barrel():
         pulled_barrel = barrel_numbers.pop()
         pulled_barrels.append(pulled_barrel)
         barrel_label.config(text=f"Вы вытащили бочонок №{pulled_barrel}")
+        logging.info(f"Вы вытащили бочонок №{pulled_barrel}")
         result_label.config(text=f"Были вытащены бочонки с номерами: {', '.join(map(str, pulled_barrels))}")
+        logging.info(f"Были вытащены бочонки с номерами: {', '.join(map(str, pulled_barrels))}")
     # Если нет, то выводится строка, что все бочонки вытащили, кнопка становится неактивной
     else:
         barrel_label.config(text="Вы вытащили все бочонки!")
+        logging.info("Все бочонки вытащены.")
         pull_button.config(state=tk.DISABLED)
 
 
